@@ -1,0 +1,67 @@
+<template>
+<div class="tutorial-page">
+    <div for="{{jokeList}}"  class="list">
+      <div class="item">
+        <text>{{$item}}</text>
+      </div>
+    </div>
+  </div>
+
+  
+</template>
+
+<style lang="less">
+body{
+  background-color: #eeeeee;
+}
+  .tutorial-page {
+    flex-direction: column;
+    & .list{
+      padding: 10px 10px;
+      & .item{
+        width: 100%;
+        padding: 20px;
+        background-color: #ffd100;
+        color: #000000;
+      }
+    }
+  }
+</style>
+
+<script>
+  import router from '@system.router'
+  import fetch from '@system.fetch'
+  export default {
+    data: {
+      jokeList:[]
+    },
+    onReady (){
+      var _this = this;
+      fetch.fetch({
+        url:'https://weixin.licoy.cn/duanzi.php?t=joke&token=s97UXAa3XOAAvw1KN8ORlcXZNsqeEO4P',
+        method:'get',
+        success(res){
+          var d = JSON.parse(res.data);
+          console.log(d)
+          if(d.code=="200"){
+            console.log("状态成功")
+            var dd = d.data;
+            for(var item in dd){
+              _this.jokeList.push(dd[item].group.content)
+            }
+            //console.log(_this.jokeList.length);
+          }
+        },
+        fail(){
+         console.log("失败")
+        }
+      })
+    },
+    routeDetail () {
+      // 跳转到应用内的某个页面，router用法详见：文档->接口->页面路由
+      router.push ({
+        uri: '/DemoDetail'
+      })
+    }
+  }
+</script>
